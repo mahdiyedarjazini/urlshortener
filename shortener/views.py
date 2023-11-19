@@ -17,7 +17,7 @@ class ShortenUrlAPIView(APIView):
                 return Response({'location': reverse('get_original_url', args=(existing_shortened_url.slug,))},
                                 HTTP_303_SEE_OTHER)
             serializer.save()
-            return Response({'location': reverse('get_original_url', args=(serializer.slug,))}, HTTP_201_CREATED)
+            return Response({'location': reverse('get_original_url', args=(serializer.instance.slug,))}, HTTP_201_CREATED)
 
 
 class RetrieveShortenUrlAPIView(APIView):
