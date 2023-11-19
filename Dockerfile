@@ -1,5 +1,5 @@
 FROM python:3.11.6-slim-bullseye
-ENV PYTHONUNBUFFERED 1
+
 # Install apt packages
 RUN apt-get update && apt-get install --no-install-recommends -y \
   # dependencies for building Python packages
