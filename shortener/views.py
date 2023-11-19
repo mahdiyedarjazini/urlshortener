@@ -5,7 +5,7 @@ from rest_framework.status import HTTP_303_SEE_OTHER, HTTP_201_CREATED, HTTP_200
 from rest_framework.views import APIView
 
 from .models import ShortenedURL
-from .serializers import URLShortenerSerializer
+from .serializers import URLShortenerSerializer, URLStatisticsSerializer
 
 
 class ShortenUrlAPIView(APIView):
@@ -29,4 +29,15 @@ class RetrieveShortenUrlAPIView(APIView):
             return Response({'error': 'Short url id does not exist.'}, HTTP_404_NOT_FOUND)
 
         serializer = URLShortenerSerializer(obj)
+        return Response(serializer.data, HTTP_200_OK)
+
+
+class ShortenedUrlStatisticsAPIView(APIView):
+    def get(self, request, short_code):
+        try:
+            obj = ShortenedURL.objects.get(slug=short_code)
+        except ObjectDoesNotExist:
+            return Response({'error': 'Short url id does not exist.'}, HTTP_404_NOT_FOUND)
+
+        serializer = URLStatisticsSerializer(obj)
         return Response(serializer.data, HTTP_200_OK)
