@@ -12,5 +12,5 @@ class URLShortenerSerializer(ModelSerializer):
 class URLStatisticsSerializer(ModelSerializer):
     class Meta:
         model = ShortenedURL
-        fields = ('visitor_count', 'created_time')
+        fields = ('visitor_count', 'created_time', "url")
         read_only_fields = fields
