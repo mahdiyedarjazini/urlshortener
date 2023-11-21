@@ -5,7 +5,7 @@ from rest_framework.status import HTTP_303_SEE_OTHER, HTTP_201_CREATED, HTTP_200
 from rest_framework.views import APIView
 
 from .models import ShortenedURL
-from .serializers import URLShortenerSerializer, URLStatisticsSerializer
+from .serializers import URLShortenerSerializer
 
 
 class ShortenUrlAPIView(APIView):
@@ -20,6 +20,7 @@ class ShortenUrlAPIView(APIView):
                        validates the data, checks if the URL already exists,
                        and either returns the existing shortened URL or creates a new one.
     """
+
     def post(self, request):
         """
         Handle POST requests for the ShortenUrlAPIView.
@@ -57,6 +58,7 @@ class RetrieveShortenUrlAPIView(APIView):
                                    increments its visitor count, serializes it into a response, and returns the response.
                                    If the ShortenedURL object does not exist, it returns a 404 error.
     """
+
     def get(self, request, short_code):
         """
         Handle GET requests for the RetrieveShortenUrlAPIView.
@@ -76,7 +78,7 @@ class RetrieveShortenUrlAPIView(APIView):
             return Response({'error': 'Short url id does not exist.'}, HTTP_404_NOT_FOUND)
 
         serializer = URLShortenerSerializer(obj)
-        return Response(serializer.data, HTTP_200_OK)
+        return Response({"location": serializer.data["url"]}, HTTP_200_OK)
 
 
 class ShortenedUrlStatisticsAPIView(APIView):
@@ -92,6 +94,7 @@ class ShortenedUrlStatisticsAPIView(APIView):
                                    serializes it into a response, and returns the response.
                                    If the ShortenedURL object does not exist, it returns a 404 error.
     """
+
     def get(self, request, short_code):
         """
         Handle GET requests for the ShortenedUrlStatisticsAPIView.
@@ -109,5 +112,5 @@ class ShortenedUrlStatisticsAPIView(APIView):
         except ObjectDoesNotExist:
             return Response({'error': 'Short url id does not exist.'}, HTTP_404_NOT_FOUND)
 
-        serializer = URLStatisticsSerializer(obj)
+        serializer = URLShortenerSerializer(obj)
         return Response(serializer.data, HTTP_200_OK)

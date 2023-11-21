@@ -6,11 +6,4 @@ from .models import ShortenedURL
 class URLShortenerSerializer(ModelSerializer):
     class Meta:
         model = ShortenedURL
-        fields = ('url',)
-
-
-class URLStatisticsSerializer(ModelSerializer):
-    class Meta:
-        model = ShortenedURL
-        fields = ('visitor_count', 'created_time', "url")
-        read_only_fields = fields
+        fields = ('url',"visitor_count", "created_time")

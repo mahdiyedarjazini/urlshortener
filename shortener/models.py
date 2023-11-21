@@ -12,20 +12,21 @@ class ShortenedURL(BaseModel):
     visitor_count = models.IntegerField(verbose_name=_('visitor_count'), null=True, default=0)
 
     @classmethod
-    def generate_slug(cls):
+    def validate_slug(cls, slug):
         """
-        Generates a unique identifier that can be used to identify the original URL.
+        Validates a slug that can be used to identify the original URL.
 
-        This method generates a random string of length 6. If the generated string already exists as a slug,
-        the method recursively calls itself until a unique slug is generated.
+        This method checks if the provided slug already exists. If it does, the method recursively generates random
+        strings of length 6 until a unique slug is generated.
 
+        :param slug: The initial slug string to be validated.
+        :type slug: str
         :return: A unique slug as a string.
         :rtype: str
         """
-        random_string = get_random_string(length=6)
-        if cls.get_existing_slug(random_string):
-            cls.generate_slug()
-        return random_string
+        while cls.get_existing_slug(slug):
+            slug = get_random_string(length=6)
+        return slug
 
     @classmethod
     def get_existing_slug(cls, string):
@@ -71,5 +72,6 @@ class ShortenedURL(BaseModel):
         :param kwargs: Arbitrary keyword arguments.
         :return: The result of the parent class's save() method.
         """
-        self.slug = self.generate_slug()
+        slug = get_random_string(length=6)
+        self.slug = self.validate_slug(slug)
         return super().save(*args, **kwargs)
