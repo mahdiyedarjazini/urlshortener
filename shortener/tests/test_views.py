@@ -32,7 +32,7 @@ class TestRetrieveShortenUrlAPIView:
         url = f'/urls/{slug}/'
         response = client.get(url, format='json')
         assert response.status_code == HTTP_200_OK
-        assert 'https://some.long.url.test/foo/bar' == response.data['url']
+        assert 'https://some.long.url.test/foo/bar' == response.data['location']
 
 
 class TestShortenedUrlStatisticsAPIView:
